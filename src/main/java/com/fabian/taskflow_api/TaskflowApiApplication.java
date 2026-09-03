@@ -1,9 +1,11 @@
-package com.taskflow.taskflow_api;
+package com.fabian.taskflow_api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
+@EnableJpaAuditing
 public class TaskflowApiApplication {
 
 	public static void main(String[] args) {
