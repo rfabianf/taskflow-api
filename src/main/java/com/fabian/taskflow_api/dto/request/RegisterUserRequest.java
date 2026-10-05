@@ -1,11 +1,13 @@
 package com.fabian.taskflow_api.dto.request;
 
 import com.fabian.taskflow_api.entity.Sexo;
+import com.fabian.taskflow_api.validation.ValidAuthentication;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
-public class RegisterUserRequest
+@ValidAuthentication
+public class RegisterUserRequest implements AuthenticationRequest
 {
     @NotEmpty
     private String nombre;
@@ -23,6 +25,7 @@ public class RegisterUserRequest
             message = "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número"
     )
     private String password;
+	private String googleCredential;
     @Past
     private LocalDate fechaNacimiento;
 
@@ -58,6 +61,7 @@ public class RegisterUserRequest
         this.sexo = sexo;
     }
 
+    @Override
     public String getEmail() {
         return email;
     }
@@ -65,7 +69,8 @@ public class RegisterUserRequest
     public void setEmail(String email) {
         this.email = email;
     }
-
+	
+	@Override
     public String getPassword() {
         return password;
     }
@@ -81,4 +86,14 @@ public class RegisterUserRequest
     public void setFechaNacimiento(LocalDate fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
+	
+	@Override
+	public String getGoogleCredential() {
+        return googleCredential;
+    }
+
+    public void setGoogleCredential(String googleCredential) {
+        this.googleCredential = googleCredential;
+    }
+
 }

@@ -19,6 +19,8 @@ public class RegisterUserResponse
     private String nombreRol;
     private LocalDateTime fechaRegistro;
 
+    private boolean registeredWithGoogle;
+
     public UUID getId() {
         return id;
     }
@@ -57,5 +59,13 @@ public class RegisterUserResponse
 
     public void setFechaRegistro(LocalDateTime fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
+    }
+
+    public boolean isRegisteredWithGoogle() {
+        return registeredWithGoogle;
+    }
+
+    public void setRegisteredWithGoogle(boolean registeredWithGoogle) {
+        this.registeredWithGoogle = registeredWithGoogle;
     }
 }

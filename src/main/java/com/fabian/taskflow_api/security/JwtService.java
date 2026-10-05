@@ -1,5 +1,6 @@
 package com.fabian.taskflow_api.security;
 
+import com.fabian.taskflow_api.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -33,7 +34,7 @@ public class JwtService {
         Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("userId", userDetails.getUsername());
         extraClaims.put("role", userDetails.getAuthorities().iterator().next().getAuthority());
-        return generateToken(extraClaims,userDetails);
+        return generateToken(extraClaims,userDetails.getUsername());
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails)
@@ -47,10 +48,10 @@ public class JwtService {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+    public String generateToken(Map<String, Object> extraClaims, String subject) {
         return Jwts.builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSigningKey())

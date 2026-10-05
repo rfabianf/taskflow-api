@@ -32,14 +32,18 @@ public class UserDetailsServiceImpl implements UserDetailsService
                 .orElseThrow(() ->  new UsernameNotFoundException("Usuario no encontrado con email:" + email));
 
         UserCredential credential = userCredentialRepository.findByUser(user)
-                .orElseThrow(() -> new UsernameNotFoundException("Credenciales no encontrados por el usuario:" + email));
+                .orElse(null);
+
+        String password = credential != null
+                ? credential.getPassword()
+                : "{noop}GOOGLE_USER";
 
         SimpleGrantedAuthority authority =
                 new SimpleGrantedAuthority(user.getRol().getNombreRol());
 
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
-                credential.getPassword(),
+                password,
                 Collections.singletonList(authority)
         );
     }

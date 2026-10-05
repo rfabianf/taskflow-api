@@ -28,6 +28,8 @@ public class UserCredential
     @NotBlank
     @Size(min = 8, max = 100)
     private String password;
+	@Enumerated(EnumType.STRING)
+	private AuthProvider authProvider;
 
     public String getPassword() {
         return password;

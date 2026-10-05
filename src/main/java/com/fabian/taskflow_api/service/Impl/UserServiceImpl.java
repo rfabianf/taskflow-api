@@ -40,17 +40,25 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public RegisterUserResponse register(RegisterUserRequest request)
     {
-        ValidateEmail(request.getEmail());
+        validateEmail(request.getEmail());
         User user = createUser(request);
         userRepository.save(user);
 
-        createCredentials(user,request.getPassword());
+        boolean hasGoogleCredential =
+                request.getGoogleCredential() != null &&
+                        !request.getGoogleCredential().isBlank();
 
-        return buildResponse(user);
+        if(!hasGoogleCredential)
+            createCredentials(user,request.getPassword());
+
+        RegisterUserResponse response= buildResponse(user);
+        response.setRegisteredWithGoogle(hasGoogleCredential);
+
+        return response;
 
     }
 
-    private void ValidateEmail(String email)
+    private void validateEmail(String email)
     {
         if (userRepository.existsByEmail(email)) {
             throw new EmailAlreadyExistsException(email);
