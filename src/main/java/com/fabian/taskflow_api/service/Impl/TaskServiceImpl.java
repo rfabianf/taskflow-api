@@ -16,13 +16,14 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Service
-public class TaskSeviceImpl implements TaskService {
+public class TaskServiceImpl implements TaskService {
     private final TaskRepository  taskRepository;
     private final UserRepository userRepository;
 
-    public TaskSeviceImpl(TaskRepository taskRepository, UserRepository userRepository) {
+    public TaskServiceImpl(TaskRepository taskRepository, UserRepository userRepository) {
         this.taskRepository = taskRepository;
         this.userRepository = userRepository;
     }
@@ -49,25 +50,13 @@ public class TaskSeviceImpl implements TaskService {
 
         taskRepository.save(task);
 
-        return new TaskResponse(
-        task.getNombreTarea(),
-        task.getDescripcionTarea(),
-        task.getFechaTarea(),
-        task.getPrioridad(),
-        task.getStatus(),
-        task.getUser().getEmail());
+        return buildResponse(task);
     }
 
     public List<TaskResponse> getAllTasks()
     {
         return taskRepository.findAll().stream()
-                .map(task -> new TaskResponse(
-                        task.getNombreTarea(),
-                        task.getDescripcionTarea(),
-                        task.getFechaTarea(),
-                        task.getPrioridad(),
-                        task.getStatus(),
-                        task.getUser().getEmail())).toList();
+                .map(this::buildResponse).toList();
     }
 
     public List<TaskResponse> getMyTasks()
@@ -80,12 +69,27 @@ public class TaskSeviceImpl implements TaskService {
         User user = userRepository.findByEmail(email).orElseThrow();
 
         return taskRepository.findByUser(user).stream()
-                .map(task -> new TaskResponse(
-                        task.getNombreTarea(),
-                        task.getDescripcionTarea(),
-                        task.getFechaTarea(),
-                        task.getPrioridad(),
-                        task.getStatus(),
-                        task.getUser().getEmail())).toList();
+                .map(this::buildResponse).toList();
+    }
+
+    public TaskResponse updateTask(UUID idTask, TaskRequest request)
+    {
+        Task oTask = taskRepository.findById(idTask).orElseThrow();
+        oTask.setStatus(request.getStatus());
+
+        taskRepository.save(oTask);
+        return buildResponse(oTask);
+    }
+
+    private TaskResponse buildResponse(Task task)
+    {
+        return new TaskResponse(
+                task.getIdTask(),
+                task.getNombreTarea(),
+                task.getDescripcionTarea(),
+                task.getFechaTarea(),
+                task.getPrioridad(),
+                task.getStatus(),
+                task.getUser().getEmail());
     }
 }

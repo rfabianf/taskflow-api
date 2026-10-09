@@ -16,7 +16,12 @@ public class TaskRequest
     String nombreTarea;
     String descripcionTarea;
     Priority prioridad;
+    Status status;
     private User user;
+
+    public Status getStatus() {
+        return status;
+    }
 
     public String getNombreTarea() {
         return nombreTarea;

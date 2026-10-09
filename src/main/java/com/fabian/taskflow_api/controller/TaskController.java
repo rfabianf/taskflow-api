@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/tasks")
@@ -33,5 +34,11 @@ public class TaskController {
     List<TaskResponse> getMyTasks()
     {
         return taskService.getMyTasks();
+    }
+
+    @PatchMapping("/{idTask}/status")
+    TaskResponse updateStatusTask(@PathVariable UUID idTask, @RequestBody TaskRequest taskRequest)
+    {
+        return taskService.updateTask(idTask,taskRequest);
     }
 }

@@ -8,6 +8,7 @@ import java.util.UUID;
 
 public record TaskResponse
 (
+    UUID idTarea,
     String nombreTarea,
     String descripcionTarea,
     LocalDate fechaTarea,
